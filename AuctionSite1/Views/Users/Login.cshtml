@@ -1,0 +1,56 @@
+﻿@model AuctionSite1.Models.ViewModels.LoginViewModel
+
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<div class="row">
+
+	<div class="card-body col-md-4 float-left">
+		<form asp-action="Login" asp-controller="Users" method="post">
+			<div asp-validation-summary="All" class="text-danger"></div>
+			<div class="form-group ">
+				<label for="UserName">Användarnamn:</label>
+				<input type="text" id="UserName" asp-for="Email" class="form-control" />
+				<span asp-validation-for="Email" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label for="PassWord">Lösenord:</label>
+				<input type="password" id="PassWord" asp-for="Password" class="form-control" />
+				<span asp-validation-for="Password" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label for="PassWord">Kom ihåg mig</label>
+				<input type="checkbox" asp-for="RememberMe" />
+			</div>
+			<button type="submit" class="btn btn-success float-left">Logga in</button>
+		</form>
+
+		<div class="col-md-4 float-left">
+			<section>
+				@{
+					var loginProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+					<form asp-action="ExternalLogin" asp-controller="Users" method="post" class="form-horizontal">
+						<div>
+							<p>
+								@foreach (var provider in loginProviders)
+								{
+									<button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.Name</button>
+								}
+							</p>
+						</div>
+					</form>
+				}
+			</section>
+		</div>
+
+	</div>
+	<div class="card-body col-md-4 float-left mt-lg-5 ml-5">
+		<a asp-controller="Users" asp-action="RegisterUser" class="float-left mr-5">Inget konto? Registrera här!</a>
+		<br />
+		<hr />
+		<a asp-controller="Users" asp-action="ForgotPassword">Glömt lösenord?</a>
+	</div>
+</div>

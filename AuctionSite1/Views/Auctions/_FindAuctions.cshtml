@@ -1,0 +1,36 @@
+﻿@model IEnumerable<AuctionSite1.Models.AuktionValues>
+
+<ul>
+	@*Foreach loop av auktioner*@
+	@foreach (var item in Model)
+	{
+		@if (item.Stängd == "Öppen")
+		{
+
+			<li class="list-group-item bg-light mb-3 float-left ml-2">
+				<div class="card-header bg-light">
+					<h5>Aktuell</h5>
+				</div>
+				<div class="card-body bg-light">
+					<h6>Titel: @item.Titel</h6>
+					<h6>Bud: @item.HögstaSumma:-</h6>
+					<h6>Utropspris: @item.Utropspris:-</h6>
+					<a asp-controller="Auctions" asp-action="Auctions" asp-route-id="@item.AuktionID">Visa auktion</a>
+				</div>
+			</li>
+		}
+		else
+		{
+			<li class="list-group-item bg-dark float-left ml-2">
+				<div class="card-header text-white bg-dark ">
+					<h5>Stängd</h5>
+				</div>
+				<div class="card-body text-white bg-dark ">
+					<h6>Titel: @item.Titel</h6>
+					<h6>Slut priset: @item.HögstaSumma</h6>
+					<a asp-controller="Auctions" asp-action="Auctions" asp-route-id="@item.AuktionID">Visa auktion</a>
+				</div>
+			</li>
+		}
+	}
+</ul>

@@ -1,0 +1,45 @@
+﻿@model IEnumerable<AuctionSite1.Models.AuktionValues>
+
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<IdentityUser> SignInManager
+
+<script src="~/js/modalPartials.js"></script>
+<div class="row" id="updateRow">
+	<div class="card-body">
+		<h3>
+			<img src="~/images/Auctions.png" />
+		</h3>
+		<ul>
+			@foreach (var item in Model)
+			{
+				@if (item.Stängd == "Öppen")
+				{
+					<li class="list-group-item float-left ml-2" style="background-color: #e6f2ff">
+						<div class="form-group">
+							<h6>Titel: @item.Titel</h6>
+							<h6>Bud: @item.HögstaSumma:-</h6>
+							<h6>Utropspris: @item.Utropspris:-</h6>
+							<a asp-controller="Auctions"
+							   asp-action="Auctions"
+							   asp-route-id="@item.AuktionID">Visa auktion</a>
+						</div>
+						@if (User.IsInRole("Admin"))
+						{
+							<!--Personen som skapat ska få knappen till sig-->
+							<a class="btn btn-danger"
+							   asp-controller="Api"
+							   asp-action="DeleteAuction"
+							   asp-route-id="@item.AuktionID">Ta bort</a>
+
+							<a class="btn btn-success"
+							   asp-controller="Api"
+							   asp-action="ChangeAuction"
+							   asp-route-id="@item.AuktionID">Uppdatera</a>
+						}
+					</li>
+				}
+			}
+		</ul>
+	</div>
+</div>

@@ -1,0 +1,56 @@
+﻿@model IEnumerable<AuctionSite1.Models.AuktionValues>
+
+<div class="row">
+	<div class="card-body">
+		<h3 class="text-center"><em>Hittade Auktioner</em></h3>
+
+		@if (Model.Count() == 0)
+		{
+			<h4>Inga auktioner hittades</h4>
+		}
+
+		else
+		{
+
+			<div id="partialUpdate">
+				<table class="table text-center table-borderless table-responsive-md table-sm table-striped table-condensed">
+					<thead class="thead-light">
+						<tr>
+							<th scope="col"><a asp-action="ASearch" asp-route-id="@Model.First().SlutDatumText">Öppen/Stängd</a></th>
+							<th scope="col">Titel</th>
+							<th scope="col">Högsta bud</th>
+							<th scope="col">
+								<a asp-controller="Auctions" asp-action="ASearch" asp-route-id="@Model.First().Stigande">↑</a> Utropspris
+								<a asp-controller="Auctions" asp-action="ASearch" asp-route-id="@Model.First().Fallande">↓</a>
+							</th>
+						</tr>
+					</thead>
+					<tbody class="justify-content-center">
+						@foreach (var item in Model)
+						{
+							@if (item.Stängd == "Öppen")
+							{
+								<tr class="table-primary">
+									<td><a class="text-dark" asp-controller="Auctions" asp-action="Auctions" asp-route-id="@item.AuktionID">Aktuell</a></td>
+									<td><a class="text-dark" asp-controller="Auctions" asp-action="Auctions" asp-route-id="@item.AuktionID">@item.Titel</a></td>
+									<td><a class="text-dark" asp-controller="Auctions" asp-action="Auctions" asp-route-id="@item.AuktionID">@item.HögstaSumma:-</a></td>
+									<td><a class="text-dark" asp-controller="Auctions" asp-action="Auctions" asp-route-id="@item.AuktionID">@item.Utropspris:-</a></td>
+								</tr>
+							}
+							else
+							{
+								<tr class="bg-dark text-white">
+									<td><a class="text-white" asp-controller="Auctions" asp-action="Auctions" asp-route-id="@item.AuktionID">Stängd</a></td>
+									<td><a class="text-white" asp-controller="Auctions" asp-action="Auctions" asp-route-id="@item.AuktionID"> @item.Titel</a></td>
+									<td><a class="text-white" asp-controller="Auctions" asp-action="Auctions" asp-route-id="@item.AuktionID">@item.HögstaSumma</a></td>
+									<td><a class="text-white" asp-controller="Auctions" asp-action="Auctions" asp-route-id="@item.AuktionID"> @item.Utropspris</a></td>
+								</tr>
+							}
+						}
+					</tbody>
+				</table>
+			</div>
+		}
+
+	</div>
+</div>

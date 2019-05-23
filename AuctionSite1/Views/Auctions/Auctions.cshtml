@@ -1,0 +1,137 @@
+﻿@model AuctionSite1.Models.AuktionValues
+
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+
+<script src="~/js/modalPartials.js"></script>
+<div class="row mt-lg-3">
+	<div class="col-sm-6">
+		@if (Model.Stängd == "Öppen")
+		{
+			<div class="card bg-light">
+				<div class="card-body bg-light">
+					<h4 class="card-header text-center"><em>@Model.Titel</em></h4>
+					<h5 class="text-center">Beskrivning: @Model.Beskrivning</h5>
+					<hr />
+					<h5 class="text-center">Avslutas: @Model.SlutD.Substring(0, 10) kl 00:00</h5>
+					<hr />
+					<h5 class="text-center">Skapad av: @Model.SkapadAv</h5>
+				</div>
+			</div>
+
+		}
+
+		else
+		{
+			<div class="card text-white bg-dark">
+				<div class="card-body text-white bg-dark">
+					<h4 class="card-header text-center"><em>@Model.Titel</em></h4>
+					<h5 class="text-center">Beskrivning: @Model.Beskrivning</h5>
+					<hr />
+					<h5 class="text-center">Avslutas: @Model.SlutD.Substring(0, 10) kl 00:00</h5>
+					<hr />
+					<h5 class="text-center">Skapad av: @Model.SkapadAv</h5>
+				</div>
+			</div>
+		}
+	</div>
+
+	<div class="col-sm-5 ml-lg-1">
+		@if (Model.Stängd == "Öppen")
+		{
+			<div asp-validation-summary="All" class="text-danger"></div>
+			<div class="card text-white bg-warning">
+				<div class="card-body text-white bg-warning">
+					<h4 class="card-header text-center"><em>Budhistorik -SEK</em></h4>
+					@if (SignInManager.IsSignedIn(User))
+					{
+						@*<form asp-controller="Api" asp-action="AddBid" method="post" class="form-inline my-2 my-lg-0 mt-lg-2">*@
+						<input type="number" class="form-control mr-sm-5" id="Sum" min="@Model.Summa" pattern="[0-9]*" maxlength="8" asp-for="Summa" />
+						<div id="javascriptMessage"></div>
+						<hr/>
+						<button type="submit" id="btnId" class="btn btn-success float-left">Lägg bud</button>
+						<span asp-validation-for="Summa" class="text-danger"></span>
+						<input type="hidden" id="auctionNr" asp-for="AuktionID" />
+						@*</form>*@
+						<input type="hidden" id="highest" asp-for="@Model.HögstaSumma" />
+
+					}
+					<br />
+					<hr />
+					<h5 class="text-center">Aktuellt bud: @Model.HögstaSumma:-</h5>
+
+					@foreach (var item in Model.Bud.OrderByDescending(x => x.Summa))
+					{
+						@if (item.AuktionID == 0)
+						{
+							<h5 class="text-center">Högsta bud: 0:-</h5>
+						}
+
+						else
+						{
+							<hr />
+							<ul>
+								<li>
+									<h5>Budgivarnr: @item.BudID. Summa @item.Summa:- </h5>
+								</li>
+							</ul>
+						}
+					}
+				</div>
+			</div>
+		}
+
+		else
+		{
+			<div class="card text-white bg-dark">
+				<div class="card-body text-white bg-dark">
+					<h4 class="card-header text-center"><em>Budhistorik</em></h4>
+
+					@if (Model.HögstaSumma == 0)
+					{
+						<h5 class="text-center">Ingen lade ett bud</h5>
+					}
+
+					else
+					{
+						@foreach (var item in Model.Bud)
+						{
+							<h5 class="text-center">Budgivarnr: @item.BudID. Vinnande budet: @item.Summa:-</h5>
+							<hr />
+						}
+					}
+				</div>
+			</div>
+		}
+	</div>
+</div>
+
+<script>
+	$('#btnId').click(function () {
+		var FormData = {
+
+			AuktionID: $('#auctionNr').val(),
+			Summa: $('#Sum').val()
+		};
+		var highest = $('#highest').val();
+
+		if (highest >= FormData.Summa) {
+			document.getElementById("javascriptMessage").innerHTML = "Budet måste vara högre än det tidigare";
+		}
+
+		else {
+			var baseUrl = "https://localhost:44366/";
+
+			$.ajax({
+				url: baseUrl + 'Api/AddBid',
+				type: "post",
+				data: { item: FormData },
+				success: function (data) {
+					window.location.reload();
+				},
+				error: function (err) {
+				}
+			});
+		}
+	});
+</script>

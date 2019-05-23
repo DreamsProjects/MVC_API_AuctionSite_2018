@@ -1,0 +1,49 @@
+﻿@model AuctionSite1.Models.ViewModels.CreateAuctionViewModel
+
+
+
+<div class="row">
+	<div class="card-body">
+		<form asp-action="PostAuction" asp-controller="Api" method="post">
+			<div asp-validation-summary="All" class="text-danger"></div>
+			<div class="form-group">
+				<div class="form-control">
+					<label for="title">Titel</label>
+					<input class="form-control" id="title" asp-for="Titel" />
+					<span asp-validation-for="Titel" class="text-danger"></span>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="form-control">
+					<label for="text">Beskrivning</label>
+					<textarea class="form-control" id="text" asp-for="Beskrivning"></textarea>
+					<span asp-validation-for="Beskrivning" class="text-danger"></span>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="form-control">
+					<label for="startDate">Start:</label>
+					<input class="form-control" id="startDate" type="date" asp-for="StartD" />
+					<span asp-validation-for="StartD" class="text-danger"></span>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="form-control">
+					<label for="endDate">Slut:</label>
+					<input class="form-control" id="endDate" type="date" asp-for="SlutD" />
+					<span asp-validation-for="SlutD" class="text-danger"></span>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="form-control">
+					<label for="startPrice">Utropspris:</label>
+					<input class="form-control" id="startPrice" asp-for="Utropspris" />
+					<span asp-validation-for="Utropspris" class="text-danger"></span>
+				</div>
+			</div>
+			<input type="hidden" class="form-control" id="gCod" asp-for="Gruppkod" value="1180" />
+			<button type="submit" class="btn btn-success float-right">Skapa</button>
+		</form>
+	</div>
+</div>
+
